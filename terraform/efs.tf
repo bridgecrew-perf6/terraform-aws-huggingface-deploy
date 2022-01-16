@@ -42,19 +42,19 @@ resource "aws_efs_file_system_policy" "policy" {
   
   policy = <<POLICY
   {
-   "Version" = "2012-10-17",
-   "Id" = "EFS_Policy_HuggingFace",
-   "Statement" = [
+   "Version" : "2012-10-17",
+   "Id" : "EFS_Policy_HuggingFace",
+   "Statement" : [
      {
-       "Sid" = "Allow_Access_To_EFS",
-       "Effect" = "Allow",
-       "Principal" = {
-         "AWS" = "*"
+       "Sid" : "Allow_Access_To_EFS",
+       "Effect" : "Allow",
+       "Principal" : {
+         "AWS" : "*"
        },
-       "Action" = "elasticfilesystem:*",
-       "Resource" = "${aws_efs_file_system.efs_example.arn}",
-       "Condition" = {
-          "Bool" = {
+       "Action" : "elasticfilesystem:*",
+       "Resource" : "${aws_efs_file_system.efs_example.arn}",
+       "Condition" : {
+          "Bool" : {
             "aws:SecureTransport" : "true"
           }
         }

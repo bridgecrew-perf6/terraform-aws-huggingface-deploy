@@ -11,8 +11,8 @@ data "aws_iam_policy" "lambda_efs_full_access" {
   arn = "arn:aws:iam::aws:policy/AmazonElasticFileSystemFullAccess"
 }
 
-resource "aws_iam_role" "lambda_efs" {
-  name = "lambdaEFS"
+resource "aws_iam_role" "lambda_efs_transformers" {
+  name = "lambdaEFSTransformers"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -31,16 +31,16 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_execute_policy" {
-  role = aws_iam_role.lambda_efs.id
+  role = aws_iam_role.lambda_efs_transformers.id
   policy_arn = data.aws_iam_policy.lambda_execute.arn
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_vpc_policy" {
-  role = aws_iam_role.lambda_efs.id
+  role = aws_iam_role.lambda_efs_transformers.id
   policy_arn = data.aws_iam_policy.lambda_vpc.arn
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_efs_full_access_policy" {
-  role = aws_iam_role.lambda_efs.id
+  role = aws_iam_role.lambda_efs_transformers.id
   policy_arn = data.aws_iam_policy.lambda_efs_full_access.arn
 }
