@@ -30,17 +30,17 @@ resource "aws_iam_role" "lambda_efs" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachement" "lambda_execute_policy" {
+resource "aws_iam_role_policy_attachment" "lambda_execute_policy" {
   role = aws_iam_role.lambda_efs.id
   policy_arn = data.aws_iam_policy.lambda_execute.arn
 }
 
-resource "aws_iam_role_policy_attachement" "lambda_vpc_policy" {
+resource "aws_iam_role_policy_attachment" "lambda_vpc_policy" {
   role = aws_iam_role.lambda_efs.id
   policy_arn = data.aws_iam_policy.lambda_vpc.arn
 }
 
-resource "aws_iam_role_policy_attachement" "lambda_efs_full_access_policy" {
+resource "aws_iam_role_policy_attachment" "lambda_efs_full_access_policy" {
   role = aws_iam_role.lambda_efs.id
   policy_arn = data.aws_iam_policy.lambda_efs_full_access.arn
 }
