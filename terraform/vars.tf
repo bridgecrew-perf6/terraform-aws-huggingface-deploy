@@ -3,7 +3,7 @@
 variable "region" {
   type = string
   description = "AWS region"
-  default = "us-east-2"
+  default = "us-east-1"
 }
 
 variable "runtime" {
@@ -17,7 +17,7 @@ variable "runtime" {
 variable "subnet_public_cidr_block" {
   type = string
   description = "CIDR block for the public subnet"
-  default = "10.0.8.0/21"
+  default = "10.0.0.0/21"
   }
 
 variable "project" {
