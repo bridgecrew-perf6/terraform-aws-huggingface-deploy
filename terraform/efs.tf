@@ -12,12 +12,13 @@ resource "aws_efs_file_system" "efs_example" {
 resource "aws_efs_mount_target" "efs_mount" {
   file_system_id = aws_efs_file_system.efs_example.id
   subnet_id      = aws_subnet.subnet_private.id
-  security_groups = [aws_default_security_group.default.id]
+  security_groups = [aws_default_security_group.default_security_group.id]
 }
 
 resource "aws_efs_access_point" "efs_access_point" {
   file_system_id = aws_efs_file_system.efs_example.id
-  posix_user     = {
+  
+  posix_user {
     uid = 1000
     gid = 1000
   }

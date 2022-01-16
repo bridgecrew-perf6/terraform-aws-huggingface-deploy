@@ -1,6 +1,10 @@
+data "aws_availability_zones" "azs" {
+  state = "available"
+}
+
 locals {
   az_names = data.aws_availability_zones.azs.names
-  public_sub_ids = aws_subnets.public.id
+  public_sub_ids = aws_subnet.subnet_public.id
 }
 
 resource "aws_vpc" "vpc" {
@@ -15,7 +19,7 @@ resource "aws_subnet" "subnet_public" {
   vpc_id = aws_vpc.vpc.id 
   cidr_block = var.subnet_public_cidr_block
   map_public_ip_on_launch = true
-  tags {
+  tags = {
     Name = "${var.project}-public-subnet"
   }
 }
@@ -31,7 +35,7 @@ resource "aws_internet_gateway" internet_gateway {
 resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.vpc.id
 
-  route = {
+  route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.internet_gateway.id
   }
@@ -67,7 +71,7 @@ resource "aws_subnet" "subnet_private" {
   vpc_id = aws_vpc.vpc.id
   cidr_block = var.subnet_private_cidr_block
   map_public_ip_on_launch = false
-  tags {
+  tags = {
     Name = "${var.project}-private-subnet"
   }
 }
@@ -75,9 +79,9 @@ resource "aws_subnet" "subnet_private" {
 resource "aws_route_table" "private_route_table" {
   vpc_id = aws_vpc.vpc.id
 
-  route = {
+  route {
     cidr_block = "0.0.0.0/0"
-    nat_gateway = aws_nat_gateway.nat_gateway.id
+    nat_gateway_id = aws_nat_gateway.nat_gateway.id
   }
 
   tags = {
@@ -91,7 +95,7 @@ resource "aws_route_table_association" "private_route_table_association" {
 }
 
 resource "aws_default_network_acl" "default_network_acl" {
-  default_network_acl_id = aws.vpc.default_network_acl_id
+  default_network_acl_id = aws_vpc.vpc.default_network_acl_id
   subnet_ids = [aws_subnet.subnet_private.id, aws_subnet.subnet_public.id]
   
   ingress {
