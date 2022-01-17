@@ -39,5 +39,5 @@ COPY --from=build-image ${FUNCTION_DIR} ${FUNCTION_DIR}
 
 ENTRYPOINT [ "python3", "-m", "awslambdaric" ]
 
-# This will get replaced by the proper handler by the CDK script
+# This will get replaced by the proper handler by the Terraform script
 CMD [ "sentiment.handler" ]

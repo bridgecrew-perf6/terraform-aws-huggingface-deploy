@@ -34,15 +34,21 @@ data aws_ecr_image lambda_image {
   image_tag = local.ecr-image_tag
 }
 
+
 resource aws_lambda_function transformers_function {
+  for_each         = fileset("${path.module}/../lambda", "*.py")
   depends_on = [null_resource.ecr_image,
   aws_efs_mount_target.efs_mount]
-  function_name = "${local.prefix}-demo-function"
+  function_name = trimsuffix(each.value,".py")
   role = aws_iam_role.lambda_efs_transformers.arn
   memory_size = 4096
   timeout = 300
   image_uri = "${aws_ecr_repository.repo.repository_url}@${data.aws_ecr_image.lambda_image.id}"
   package_type = "Image"
+
+  image_config {
+    command = ["${trimsuffix(each.value,".py")}.handler"]
+  }
 
   environment {
     variables = {
