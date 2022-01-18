@@ -131,6 +131,7 @@ CMD [ "sentiment.handler" ]
 
 The IaC code is split into logical parts to make it easier to extend and maintain.
 
+```
 .
 ├── efs.tf
 ├── iam.tf
@@ -138,6 +139,7 @@ The IaC code is split into logical parts to make it easier to extend and maintai
 ├── main.tf
 ├── vars.tf
 ├── vpc.tf
+```
 
 ### lamda.tf
 
