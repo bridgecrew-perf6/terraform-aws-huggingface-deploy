@@ -23,12 +23,12 @@ resource "aws_efs_access_point" "efs_access_point" {
     gid = 1000
   }
   root_directory {
-    path = "/access"
+    path = var.efs_root_directory
 
     creation_info {
       owner_gid = 1000
       owner_uid = 1000
-      permissions = "777"
+      permissions = var.efs_permissions
     }
   }
 
