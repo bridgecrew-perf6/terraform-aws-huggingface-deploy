@@ -17,7 +17,7 @@ resource null_resource ecr_image {
   provisioner "local-exec" {
     command = <<Command
     aws ecr get-login-password --region ${var.region} | docker login --username AWS --password-stdin ${local.account_id}.dkr.ecr.${var.region}.amazonaws.com
-    cd ${path.module}/../${local.app_dir}
+    cd ${path.module}/../${var.lambda_dir}
     docker build -t ${aws_ecr_repository.repo.repository_url}:${var.ecr_image_tag} .
     docker push ${aws_ecr_repository.repo.repository_url}:${var.ecr_image_tag}
     Command
