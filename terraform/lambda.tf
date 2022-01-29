@@ -1,37 +1,33 @@
 data aws_caller_identity "current" {}
 
 locals {
-  prefix = "transformers"
-  app_dir = "lambda"
   account_id = data.aws_caller_identity.current.account_id
-  ecr_repository_name = "${local.prefix}-lambda-container"
-  ecr-image_tag = "latest"
 }
 
 resource aws_ecr_repository repo {
-  name = local.ecr_repository_name
+  name = var.ecr_repository_name
 }
 
 resource null_resource ecr_image {
   triggers = {
-    python_file = md5(file("${path.module}/../${local.app_dir}/sentiment.py"))
-    docker_file = md5(file("${path.module}/../${local.app_dir}/Dockerfile"))
+    python_file = md5(file("${path.module}/../${var.lambda_dir}/sentiment.py"))
+    docker_file = md5(file("${path.module}/../${var.lambda_dir}/Dockerfile"))
   }
   
   provisioner "local-exec" {
     command = <<Command
     aws ecr get-login-password --region ${var.region} | docker login --username AWS --password-stdin ${local.account_id}.dkr.ecr.${var.region}.amazonaws.com
     cd ${path.module}/../${local.app_dir}
-    docker build -t ${aws_ecr_repository.repo.repository_url}:${local.ecr-image_tag} .
-    docker push ${aws_ecr_repository.repo.repository_url}:${local.ecr-image_tag}
+    docker build -t ${aws_ecr_repository.repo.repository_url}:${var.ecr_image_tag} .
+    docker push ${aws_ecr_repository.repo.repository_url}:${var.ecr_image_tag}
     Command
   }
 }
 
 data aws_ecr_image lambda_image {
   depends_on = [null_resource.ecr_image]
-  repository_name = local.ecr_repository_name
-  image_tag = local.ecr-image_tag
+  repository_name = var.ecr_repository_name
+  image_tag = var.ecr_image_tag
 }
 
 

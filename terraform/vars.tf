@@ -20,6 +20,12 @@ variable "project" {
 
 # AWS Lambda Function Configuration
 
+variable "lambda_dir" {
+  type = string
+  description = "Memory size for the Lambda function"
+  default = "lambda"
+}
+
 variable "memory" {
   type = string
   description = "Memory size for the Lambda function"
@@ -44,6 +50,19 @@ variable "lambda_transformers_cache" {
   default = "/mnt/hf_models_cache"
 }
 
+# AWS ECR Image Configuration
+
+variable "ecr_container_image" {
+  type = string
+  description = "Memory size for the Lambda function"
+  default = "transformers-lambda-container"
+}
+
+variable "ecr_image_tag" {
+  type = string
+  description = "Memory size for the Lambda function"
+  default = "latest"
+}
 
 # AWS VPC Configuration
 
