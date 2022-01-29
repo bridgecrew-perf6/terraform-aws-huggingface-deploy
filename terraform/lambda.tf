@@ -4,7 +4,7 @@ locals {
   prefix = "transformers"
   app_dir = "lambda"
   account_id = data.aws_caller_identity.current.account_id
-  ecr_repository_name = "${local.prefix}-demo-lambda-container"
+  ecr_repository_name = "${local.prefix}-lambda-container"
   ecr-image_tag = "latest"
 }
 
@@ -37,28 +37,28 @@ data aws_ecr_image lambda_image {
 
 resource aws_lambda_function transformers_function {
   for_each         = fileset("${path.module}/../lambda", "*.py")
-  depends_on = [null_resource.ecr_image,
+  depends_on       = [null_resource.ecr_image,
   aws_efs_mount_target.efs_mount]
   function_name = trimsuffix(each.value,".py")
   role = aws_iam_role.lambda_efs_transformers.arn
-  memory_size = 4096
-  timeout = 300
+  memory_size = var.memory
+  timeout = var.timeout
   image_uri = "${aws_ecr_repository.repo.repository_url}@${data.aws_ecr_image.lambda_image.id}"
   package_type = "Image"
 
   image_config {
-    command = ["${trimsuffix(each.value,".py")}.handler"]
+    command = [ "${trimsuffix(each.value,".py")}.handler" ]
   }
 
   environment {
     variables = {
-      TRANSFORMERS_CACHE: "/mnt/hf_models_cache"
+      TRANSFORMERS_CACHE: var.transformers_cache
     }
   } 
 
   file_system_config {
     arn = aws_efs_access_point.efs_access_point.arn
-    local_mount_path = "/mnt/hf_models_cache"
+    local_mount_path = var.transformers_cache
   }
 
   vpc_config {

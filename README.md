@@ -76,7 +76,7 @@ def handler(event, context):
     return response
 ```
 
-## Dockerfile
+### Dockerfile
 
 This is taken from the original AWS example, we use the `transformers-ptorch-cpu` base image as it already has torch optimised for cpu inference, lambda build dependencies are added to the image as well as some of the pre-requisite transformers libraries which are not held in the original image, [lambdaric](https://pypi.org/project/awslambdaric/) provides a runtime interface client to lambda and is used as the `ENTRYPOINT` for docker. the `CMD` is dynamically adjusted using Terraform.
 
@@ -127,7 +127,7 @@ CMD [ "sentiment.handler" ]
 ```
 
 
-## Terraform
+### Terraform
 
 The IaC code is split into logical parts to make it easier to extend and maintain.
 
