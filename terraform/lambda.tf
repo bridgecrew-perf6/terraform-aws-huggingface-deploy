@@ -48,13 +48,13 @@ resource aws_lambda_function transformers_function {
 
   environment {
     variables = {
-      TRANSFORMERS_CACHE: var.transformers_cache
+      TRANSFORMERS_CACHE: var.lambda_mount_path
     }
   } 
 
   file_system_config {
     arn = aws_efs_access_point.efs_access_point.arn
-    local_mount_path = var.transformers_cache
+    local_mount_path = var.lambda_mount_path
   }
 
   vpc_config {

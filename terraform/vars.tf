@@ -18,6 +18,12 @@ variable "project" {
   default = "terraform-huggingface-lambda"
   }
 
+variable "ecr_repository_name" {
+  type = string
+  description = "Name of the ECR repository"
+  default = "transformers-demo-lambda-container"
+}
+
 # AWS Lambda Function Configuration
 
 variable "lambda_dir" {
